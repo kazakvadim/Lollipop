@@ -4,6 +4,23 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+def versionMajor = 1
+def versionMinor = 0
+def versionPatch = 0
+
+def getVersionName = { ->
+    try {
+        def stdout = new ByteArrayOutputStream()
+        exec {
+            commandLine 'git', 'describe', '--tags'
+            standardOutput = stdout
+        }
+        return stdout.toString().trim()
+    }
+    catch (ignored) {
+        return null;
+    }
+}
 android {
     compileSdkVersion 28
     defaultConfig {
@@ -11,8 +28,8 @@ android {
         minSdkVersion 21
         targetSdkVersion 28
         versionCode 1
-        versionName "0.1.0"
-        setProperty("archivesBaseName", "Lollipop-$versionName")
+        versionName getVersionName()
+        System.out.println(getVersionName())
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
