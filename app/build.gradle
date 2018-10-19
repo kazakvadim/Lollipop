@@ -13,19 +13,41 @@ def versionMinor = 0
 def versionPatch = 0
 
 def getVersionName = { ->
-    try {
+   // try {
         def stdout = new ByteArrayOutputStream()
         exec {
             commandLine 'git', 'describe', '--tags'
             standardOutput = stdout
         }
         def str = stdout.toString().trim()
-
-        return stdout.toString().trim()
-    }
+        System.out.println(str.contains('-'))
+        if (str.contains('-')){
+            str = str.substring(1, str.length() - 9)
+            System.out.println(str)
+            def pointIndex = str.indexOf('.')
+            def dashIndex = str.indexOf('-')
+            versionMajor = str.substring(0, pointIndex).toInteger()
+            versionMinor = str.substring(pointIndex + 1, dashIndex).toInteger()
+            versionPatch = str.substring(dashIndex + 1, str.length())
+            System.out.println("Major " + versionMajor)
+            System.out.println("Minor " + versionMinor)
+            System.out.println("Patch " + versionPatch)
+        }
+        else {
+            str = str.substring(1, str.length())
+            System.out.println(str)
+            def pointIndex = str.indexOf('.')
+            versionMajor = str.substring(0, pointIndex).toInteger()
+            versionMinor = str.substring(pointIndex + 1, str.length()).toInteger()
+            System.out.println("Major " + versionMajor)
+            System.out.println("Minor " + versionMinor)
+            System.out.println("Patch " + versionPatch)
+        }
+        return str
+   /* }
     catch (ignored) {
         return null;
-    }
+    }*/
 }
 android {
     signingConfigs {
@@ -43,7 +65,7 @@ android {
         targetSdkVersion 28
         versionCode 1
         versionName getVersionName()
-        System.out.println(getVersionName())
+        System.out.println('version ' + getVersionName())
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
