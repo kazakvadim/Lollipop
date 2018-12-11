@@ -19,7 +19,6 @@ import android.widget.TextView
 import android.widget.Toast
 import java.util.jar.Manifest
 import kotlinx.android.synthetic.main.activity_main.*
-
 import android.util.Log;
 import android.view.Menu
 import android.view.MenuItem
@@ -45,9 +44,9 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        val permissionHelper = PermissionHelper(this)
         val host: NavHostFragment = supportFragmentManager
                 .findFragmentById(R.id.my_nav_host_fragment) as NavHostFragment? ?: return
-        val permissionHelper = PermissionHelper(this)
         val navController = host.navController
         setupBottomNavMenu(navController)
         setSupportActionBar(toolbar)
@@ -78,24 +77,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        // Allows NavigationUI to support proper up navigation or the drawer layout
-        // drawer menu, depending on the situation
         return navigateUp(findNavController(R.id.my_nav_host_fragment), null)
     }
     private fun setupBottomNavMenu(navController: NavController) {
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_nav_view)
         bottomNav?.setupWithNavController(navController)
     }
-
-//    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-//        val permissionHelper = PermissionHelper(this)
-//        permissionHelper.onRequestPermissionsResult(requestCode, permissions, grantResults)
-//        if (requestCode == Constants.IMEI_PERMISSION_CODE){
-//            if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-//                Toast.makeText(this, getString(R.string.permission_granted_text_short), Toast.LENGTH_SHORT).show()
-//            } else {
-//                Toast.makeText(this, getString(R.string.permission_denied_text_short), Toast.LENGTH_SHORT).show()
-//            }
-//        }
-//    }
 }

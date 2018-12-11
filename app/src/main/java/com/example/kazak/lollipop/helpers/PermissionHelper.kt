@@ -19,7 +19,7 @@ import com.example.kazak.lollipop.R
 
 class PermissionHelper(activity: Activity) {
     private var app_permissions = arrayOf<String>()
-    private var activity: Activity? = activity
+    private var activity: Activity = activity
     init {
         this.activity = activity
     }

@@ -1,45 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent">
-
     <Button
         android:id="@+id/request_imei"
         android:layout_width="194dp"
-        android:layout_height="63dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="96dp"
+        android:layout_height="30dp"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="264dp"
         android:layout_marginEnd="94dp"
+        android:background="@color/colorPrimary"
+        android:textColor="@color/graylight"
         android:layout_marginBottom="240dp"
         android:text="Request permission" />
-
     <TextView
         android:id="@+id/version_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="250dp"
-        android:layout_marginTop="431dp"
-        android:layout_marginEnd="93dp"
-        android:layout_marginBottom="118dp" />
-
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="40dp"
+        android:layout_marginBottom="40dp" />
     <TextView
         android:id="@+id/imei_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="106dp"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="177dp"
-        android:layout_marginEnd="106dp"
         android:layout_marginBottom="366dp"
-        android:text="TextView" />
+        android:text="IMEI" />
 </RelativeLayout>

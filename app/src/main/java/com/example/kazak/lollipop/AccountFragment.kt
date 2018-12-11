@@ -16,7 +16,6 @@ import android.graphics.Bitmap
 import android.icu.text.SimpleDateFormat
 import android.net.Uri
 import android.os.Environment
-import android.provider.SyncStateContract
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
@@ -26,7 +25,6 @@ import com.example.kazak.lollipop.model.User
 import java.io.File
 import java.io.IOException
 import java.util.*
-import kotlinx.android.synthetic.main.account_fragment.*
 
 
 class AccountFragment: Fragment() {
@@ -45,12 +43,11 @@ class AccountFragment: Fragment() {
     {
         super.onViewCreated(view, savedInstanceState)
         camera_button.setOnClickListener{
-            //StartCameraIntent()
             dispatchTakePictureIntent()
         }
 
         gallery_button.setOnClickListener{
-            dispatchPickPictureIntent()
+            dispatchSelectPictureIntent()
         }
         change_profile.setOnClickListener{
             profile_switcher.showNext()
@@ -83,7 +80,6 @@ class AccountFragment: Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?)
     {
         super.onActivityResult(requestCode, resultCode, data)
-
         if(resultCode == Activity.RESULT_OK)
         {
             if (requestCode == Constants.REQUEST_IMAGE_CAPTURE) {
@@ -109,22 +105,25 @@ class AccountFragment: Fragment() {
 
     @Throws(IOException::class)
     private fun createImageFile(): File {
-        // Create an image file name
+        // file name
         val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
-        //val storageDir: File = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+        // directory
         val storageDir: File? = activity?.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-
+//        val file: File? = File.createTempFile("JPEG_${timeStamp}_", ".jpg", storageDir)
+//        if (file != null){
+//            PhotoPath = file.absolutePath
+//        }
+//        return file!!
         return File.createTempFile(
-                "JPEG_${timeStamp}_", /* prefix */
-                ".jpg", /* suffix */
-                storageDir /* directory */
+                "JPEG_${timeStamp}_",
+                ".jpg",
+                storageDir
         ).apply {
-            // Save a file: path for use with ACTION_VIEW intents
             PhotoPath = absolutePath
         }
     }
 
-    private fun dispatchPickPictureIntent()
+    private fun dispatchSelectPictureIntent()
     {
         if (ContextCompat.checkSelfPermission(context!!,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
@@ -144,18 +143,15 @@ class AccountFragment: Fragment() {
                 ContextCompat.checkSelfPermission(context!!,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
         {
-            val frag: Fragment = this
+            val fragment: Fragment = this
             Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
-                // Ensure that there's a camera activity to handle the intent
                 takePictureIntent.resolveActivity(activity!!.packageManager)?.also {
-                    // Create the File where the photo should go
                     val photoFile: File? = try {
                         createImageFile()
                     } catch (ex: IOException) {
-                        // Error occurred while creating the File
                         null
                     }
-                    // Continue only if the File was successfully created
+                    // if the File was successfully created
                     photoFile?.also {
                         val photoURI: Uri = FileProvider.getUriForFile(
                                 context!!,
@@ -163,7 +159,7 @@ class AccountFragment: Fragment() {
                                 it
                         )
                         takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
-                        frag.startActivityForResult(takePictureIntent, Constants.REQUEST_IMAGE_CAPTURE)
+                        fragment.startActivityForResult(takePictureIntent, Constants.REQUEST_IMAGE_CAPTURE)
                     }
                 }
             }
