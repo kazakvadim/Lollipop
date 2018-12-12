@@ -1,4 +1,4 @@
-package com.example.kazak.lollipop.model
+package com.example.kazak.lollipop.Model
 
 class User(name: String, last_name: String,
            email:String, phone:String) {

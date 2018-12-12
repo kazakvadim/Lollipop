@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "456812362561",
+    "firebase_url": "https://lollipop-83fa4.firebaseio.com",
+    "project_id": "lollipop-83fa4",
+    "storage_bucket": "lollipop-83fa4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:456812362561:android:0efcdff800a7b370",
+        "android_client_info": {
+          "package_name": "com.example.kazak.lollipop"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "456812362561-nb8v8euq9oqtps14qrjfn9nv2np77lu7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.kazak.lollipop",
+            "certificate_hash": "f7454b709490333e4b004d98df264e684152d344"
+          }
+        },
+        {
+          "client_id": "456812362561-50l20n9fm7reas446tj3s2d1pisppedd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC1N5eQTn4W2fwCxNaDxa1h5iEBUNll4To"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "456812362561-50l20n9fm7reas446tj3s2d1pisppedd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

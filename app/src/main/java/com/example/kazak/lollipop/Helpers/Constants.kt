@@ -1,4 +1,4 @@
-package com.example.kazak.lollipop.helpers
+package com.example.kazak.lollipop.Helpers
 
 class Constants {
 

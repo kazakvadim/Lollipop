@@ -1,38 +1,20 @@
 package com.example.kazak.lollipop
 
-import android.app.Activity
-import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.hardware.usb.UsbDevice.getDeviceId
-import android.content.Context.TELEPHONY_SERVICE
-import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
-import android.net.Uri
-import android.os.PersistableBundle
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.getSystemService
-import android.telephony.TelephonyManager
-import android.view.View
-import android.widget.TextView
-import android.widget.Toast
-import java.util.jar.Manifest
 import kotlinx.android.synthetic.main.activity_main.*
-import android.util.Log;
 import android.view.Menu
 import android.view.MenuItem
 import androidx.navigation.NavController
-import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI.navigateUp
 import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import com.example.kazak.lollipop.helpers.Constants
-import com.example.kazak.lollipop.helpers.PermissionHelper
-import com.example.kazak.lollipop.model.User
+import com.example.kazak.lollipop.Helpers.PermissionHelper
 // import com.example.kazak.lollipop.R.id.IMEIView
 // import com.example.kazak.lollipop.R.id.versionView
 import com.google.android.material.bottomnavigation.BottomNavigationView

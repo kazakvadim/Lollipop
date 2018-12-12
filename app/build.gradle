@@ -3,6 +3,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'com.google.gms.google-services'
 
 def keystorePropertiesFile = rootProject.file("keystore.properties")
 def keystoreProperties = new Properties()
@@ -22,13 +23,10 @@ def getVersionName = { ->
     def dash_index = str.indexOf('-')
 
     versionMajor = str.substring(1, str.indexOf('.')).toInteger()
-    if (dash_index != -1)
-    {
+    if (dash_index != -1) {
         versionPatch = str.substring(dash_index + 1, str.indexOf('-', dash_index + 1)).toInteger()
         versionMinor = str.substring(str.indexOf('.') + 1, dash_index).toInteger()
-    }
-    else
-    {
+    } else {
         versionMinor = str.substring(str.indexOf('.') + 1).toInteger()
     }
 
@@ -96,4 +94,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
     implementation "android.arch.navigation:navigation-fragment-ktx:1.0.0-alpha07"
     implementation "android.arch.navigation:navigation-ui-ktx:1.0.0-alpha07"
+    implementation 'com.google.firebase:firebase-core:16.0.6'
+    implementation 'com.google.firebase:firebase-storage:16.0.5'
+    implementation 'com.google.firebase:firebase-auth:16.1.0'
 }
