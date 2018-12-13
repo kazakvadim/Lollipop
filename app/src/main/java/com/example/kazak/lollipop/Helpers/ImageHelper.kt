@@ -38,7 +38,6 @@ class ImageHelper(activity: Activity, fragment: Fragment) {
         }
     }
 
-
     fun dispatchTakePictureIntent() {
         if (ContextCompat.checkSelfPermission(activity,
                         Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED &&
@@ -68,5 +67,42 @@ class ImageHelper(activity: Activity, fragment: Fragment) {
             permissionHelper.requestPhotoPermission()
         }
     }
-
 }
+
+
+
+//    fun dispatchTakePictureIntent() {
+//        if (ContextCompat.checkSelfPermission(activity,
+//                        Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED &&
+//                ContextCompat.checkSelfPermission(activity,
+//                        Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
+//        {
+//            val frag: Fragment = fragment
+//            Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
+//                // Ensure that there's a camera activity to handle the intent
+//                takePictureIntent.resolveActivity(activity.packageManager)?.also {
+//                    // Create the File where the photo should go
+//                    val photoFile: File? = try {
+//                        createImageFile()
+//                    } catch (ex: IOException) {
+//                        // Error occurred while creating the File
+//                        null
+//                    }
+//                    // Continue only if the File was successfully created
+//                    photoFile?.also {
+//                        val photoURI: Uri = FileProvider.getUriForFile(
+//                                activity,
+//                                "com.example.android.fileprovider",
+//                                it
+//                        )
+//                        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+//                        frag.startActivityForResult(takePictureIntent, Constants.REQUEST_IMAGE_CAPTURE)
+//                    }
+//                }
+//            }
+//        }
+//        else {
+//            permissionHelper.requestPhotoPermission()
+//        }
+//
+//    }

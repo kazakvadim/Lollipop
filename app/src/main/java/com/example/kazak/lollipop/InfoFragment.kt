@@ -34,6 +34,7 @@ class InfoFragment: Fragment() {
         if (checkSelfPermission(context!!,
                         android.Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
             getIMEI()
+            request_imei.visibility = View.GONE
         } else {
             requestImeiPermission();
         }
@@ -69,6 +70,7 @@ class InfoFragment: Fragment() {
             if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
                 Toast.makeText(context, getString(R.string.permission_granted_text_short), Toast.LENGTH_SHORT).show()
                 getIMEI()
+                request_imei.visibility = View.GONE
             } else {
                 Toast.makeText(context, getString(R.string.permission_denied_text_short), Toast.LENGTH_SHORT).show()
             }
