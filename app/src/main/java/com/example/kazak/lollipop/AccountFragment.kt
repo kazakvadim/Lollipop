@@ -39,6 +39,7 @@ class AccountFragment: Fragment() {
     val mDatabase = FirebaseDatabase.getInstance().getReference()
     val mUsersRef = mDatabase.child("users")
     lateinit var cur_user : User
+    var tempUri : String? = null
 
 
     override fun onCreateView(inflater: LayoutInflater,
@@ -61,12 +62,17 @@ class AccountFragment: Fragment() {
                         last_name = cur_user.last_name.toString(),
                         image_uri = cur_user.image_uri.toString()
                 )
+                if (tempUri != null){
+                    avatar_image_view?.setImageURI(Uri.parse(tempUri))
+                    cur_user.image_uri = tempUri
+                }
                 mUsersRef.child("Kozachenko").setValue(user)
             }
             DialogInterface.BUTTON_NEGATIVE ->
             {
                 edit_email.setText(email_text_view.text)
                 edit_phone.setText(phone_text_view.text)
+                avatar_image_view1.setImageURI(Uri.parse(cur_user.image_uri))
             }
         }
         profile_switcher.showNext()
@@ -82,13 +88,13 @@ class AccountFragment: Fragment() {
                     cur_user = user
                 }
                 cur_user?.let {
-                    email_text_view?.text = cur_user.email
-                    edit_email?.setText(cur_user.email)
-                    phone_text_view?.text = cur_user.phone
-                    edit_phone?.setText(cur_user.phone)
-                    full_name_text_view?.text = cur_user.name + " " + cur_user.last_name
+                    email_text_view?.text = it.email
+                    edit_email?.setText(it.email)
+                    phone_text_view?.text = it.phone
+                    edit_phone?.setText(it.phone)
+                    full_name_text_view?.text = it.name + " " + it.last_name
 
-                    val photoUri = Uri.parse(cur_user.image_uri)
+                    val photoUri = Uri.parse(it.image_uri)
                     avatar_image_view?.setImageURI(photoUri)
                    avatar_image_view1?.setImageURI(photoUri)
                 }
@@ -137,6 +143,8 @@ class AccountFragment: Fragment() {
                 val photoURI = Uri.fromFile(f)
                 avatar_image_view.setImageURI(photoURI)
                 cur_user.image_uri = photoURI.toString()
+                avatar_image_view1.setImageURI(photoURI)
+                tempUri = photoURI.toString()
             }
             else if (requestCode == Constants.REQUEST_GALLERY_PICK)
             {
@@ -145,11 +153,13 @@ class AccountFragment: Fragment() {
                     val photoURI : Uri = data.data!!
                     val bmp : Bitmap = MediaStore.Images.Media.getBitmap(activity?.contentResolver, photoURI)
                     avatar_image_view.setImageBitmap(bmp)
-                    cur_user.image_uri = photoURI.toString()
+                    avatar_image_view1.setImageBitmap(bmp)
+                    tempUri = photoURI.toString()
+                    // cur_user.image_uri = photoURI.toString()
                 }
             }
         }
-        mDatabase.child("users").child("Kozachenko").setValue(cur_user)
+        //mDatabase.child("users").child("Kozachenko").setValue(cur_user)
 
     }
 }
