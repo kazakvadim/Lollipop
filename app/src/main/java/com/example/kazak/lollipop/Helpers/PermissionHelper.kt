@@ -7,6 +7,7 @@ import android.content.Context
 import android.widget.Toast
 import androidx.core.app.ActivityCompat.requestPermissions
 import androidx.core.app.ActivityCompat.shouldShowRequestPermissionRationale
+import com.example.kazak.lollipop.Helpers.Constants.Companion.ALL_PERMISSION_CODE
 import com.example.kazak.lollipop.R
 
 
@@ -27,7 +28,7 @@ class PermissionHelper(activity: Activity) {
                     Toast.LENGTH_LONG).show()
         }
         requestPermissions(activity,
-                all_perms, Constants.ALL_PERMISSION_CODE)
+                all_perms, ALL_PERMISSION_CODE)
     }
 
     fun requestPhotoPermission(){

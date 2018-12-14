@@ -14,6 +14,7 @@ import androidx.core.content.ContextCompat.checkSelfPermission
 import android.Manifest
 import android.app.Activity
 import com.example.kazak.lollipop.Helpers.Constants
+import com.example.kazak.lollipop.Helpers.Constants.Companion.IMEI_PERMISSION_CODE
 import com.example.kazak.lollipop.Helpers.PermissionHelper
 
 
@@ -28,6 +29,7 @@ class InfoFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?)
     {
         super.onViewCreated(view, savedInstanceState)
+
         version_text_view.text = BuildConfig.VERSION_NAME
         request_imei.setOnClickListener{
             request_button(view)
@@ -66,7 +68,7 @@ class InfoFragment: Fragment() {
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        if (requestCode == Constants.IMEI_PERMISSION_CODE){
+        if (requestCode == IMEI_PERMISSION_CODE){
             if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
                 Toast.makeText(context, getString(R.string.permission_granted_text_short), Toast.LENGTH_SHORT).show()
                 getIMEI()

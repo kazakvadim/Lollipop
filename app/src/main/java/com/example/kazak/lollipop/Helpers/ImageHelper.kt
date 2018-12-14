@@ -9,10 +9,11 @@ import android.icu.text.SimpleDateFormat
 import android.net.Uri
 import android.os.Environment
 import android.provider.MediaStore
-import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
+import com.example.kazak.lollipop.Helpers.Constants.Companion.CAMERA
+import com.example.kazak.lollipop.Helpers.Constants.Companion.GALLERY
 import java.io.File
 import java.io.IOException
 import java.util.*
@@ -41,16 +42,16 @@ class ImageHelper(context: Context, fragment: Fragment) {
     }
 
     fun dispatchTakePictureIntent() {
-        if (ContextCompat.checkSelfPermission(context,
+        if (checkSelfPermission(context,
                         Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission(context,
+                checkSelfPermission(context,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
         {
             val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
             val photoFile = createImageFile()
             val photoURI: Uri = FileProvider.getUriForFile(context,"com.example.android.fileprovider", photoFile)
             intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
-            fragment.startActivityForResult(intent, Constants.REQUEST_IMAGE_CAPTURE)
+            fragment.startActivityForResult(intent, CAMERA)
         }
         else {
             permissionHelper.requestPhotoPermission()
@@ -63,7 +64,7 @@ class ImageHelper(context: Context, fragment: Fragment) {
                         Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
         {
             val intent = Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-            fragment.startActivityForResult(intent, Constants.REQUEST_GALLERY_PICK)
+            fragment.startActivityForResult(intent, GALLERY)
         }
         else {
             permissionHelper.requestPhotoPermission()

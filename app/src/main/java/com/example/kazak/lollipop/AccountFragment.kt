@@ -15,13 +15,10 @@ import android.content.pm.PackageManager
 import android.provider.MediaStore
 import kotlinx.android.synthetic.main.account_fragment.*
 import android.graphics.Bitmap
-import android.icu.text.SimpleDateFormat
 import android.net.Uri
-import android.os.Environment
-import android.widget.Toast
-import androidx.core.content.ContextCompat
-import androidx.core.content.FileProvider
 import com.example.kazak.lollipop.Helpers.Constants
+import com.example.kazak.lollipop.Helpers.Constants.Companion.CAMERA
+import com.example.kazak.lollipop.Helpers.Constants.Companion.GALLERY
 import com.example.kazak.lollipop.Helpers.ImageHelper
 import com.example.kazak.lollipop.Helpers.PermissionHelper
 import com.example.kazak.lollipop.Model.User
@@ -30,8 +27,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import java.io.File
-import java.io.IOException
-import java.util.*
+import androidx.core.app.NotificationCompat.getExtras
 
 
 class AccountFragment: Fragment() {
@@ -135,9 +131,8 @@ class AccountFragment: Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?)
     {
         super.onActivityResult(requestCode, resultCode, data)
-        if(resultCode == Activity.RESULT_OK)
-        {
-            if (requestCode == Constants.REQUEST_IMAGE_CAPTURE) {
+        if(resultCode == Activity.RESULT_OK) {
+            if (requestCode == CAMERA) {
                 val f = File(imageHelper.PhotoPath)
                 val photoURI = Uri.fromFile(f)
                 avatar_image_view.setImageURI(photoURI)
@@ -145,20 +140,14 @@ class AccountFragment: Fragment() {
                 avatar_image_view1.setImageURI(photoURI)
                 tempUri = photoURI.toString()
             }
-            else if (requestCode == Constants.REQUEST_GALLERY_PICK)
-            {
-                if(data != null)
-                {
-                    val photoURI : Uri = data.data!!
-                    val bmp : Bitmap = MediaStore.Images.Media.getBitmap(activity?.contentResolver, photoURI)
-                    avatar_image_view.setImageBitmap(bmp)
-                    avatar_image_view1.setImageBitmap(bmp)
-                    tempUri = photoURI.toString()
-                    // cur_user.image_uri = photoURI.toString()
-                }
+            else if (requestCode == GALLERY) {
+                val photoURI: Uri? = data?.data
+                val bmp: Bitmap = MediaStore.Images.Media.getBitmap(activity?.contentResolver, photoURI)
+                avatar_image_view.setImageBitmap(bmp)
+                avatar_image_view1.setImageBitmap(bmp)
+                tempUri = photoURI.toString()
+                // cur_user.image_uri = photoURI.toString()
             }
         }
-        //mDatabase.child("users").child("Kozachenko").setValue(cur_user)
-
     }
 }
