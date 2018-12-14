@@ -105,7 +105,7 @@ class AccountFragment: Fragment() {
         }
         val currentUserRef = mUsersRef.child("Kozachenko")
         currentUserRef.addValueEventListener(userListener)
-        val permissionHelper = PermissionHelper(activity!!)
+        val permissionHelper = PermissionHelper(context as Activity)
         camera_button.setOnClickListener{
             imageHelper.dispatchTakePictureIntent()
         }
@@ -123,10 +123,9 @@ class AccountFragment: Fragment() {
                     .show()
 //            profile_switcher.showNext()
         }
-        if (ContextCompat.checkSelfPermission(context!!,
-                    Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ||
-            ContextCompat.checkSelfPermission(context!!,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+
+        if (context?.checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ||
+                context?.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             permissionHelper.requestPhotoPermission()
         }
 //        val user = User(name = "Vadim", last_name = "Kozachenko", email = "k.a.z.a.k.2013@mail.ru", phone = "+375296966798")

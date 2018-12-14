@@ -1,5 +1,6 @@
 package com.example.kazak.lollipop
 
+import android.Manifest
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -35,15 +36,15 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         setupActionBarWithNavController(navController)
         if (ActivityCompat.checkSelfPermission(this,
-                        android.Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED ||
+                        Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED ||
             ActivityCompat.checkSelfPermission(this,
-                    android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ||
+                    Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ||
             ActivityCompat.checkSelfPermission(this,
-                    android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             permissionHelper.requestAllPermission(arrayOf(
-                    android.Manifest.permission.READ_PHONE_STATE,
-                    android.Manifest.permission.CAMERA,
-                    android.Manifest.permission.WRITE_EXTERNAL_STORAGE))
+                    Manifest.permission.READ_PHONE_STATE,
+                    Manifest.permission.CAMERA,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE))
         }
     }
 

@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.info_fragment.*
 import androidx.core.content.ContextCompat.checkSelfPermission
 import android.Manifest
+import android.app.Activity
 import com.example.kazak.lollipop.Helpers.Constants
 import com.example.kazak.lollipop.Helpers.PermissionHelper
 
@@ -31,9 +32,9 @@ class InfoFragment: Fragment() {
         request_imei.setOnClickListener{
             request_button(view)
         }
-        if (checkSelfPermission(context!!,
-                        android.Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
+        if (context?.checkSelfPermission(Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
             getIMEI()
+
             request_imei.visibility = View.GONE
         } else {
             requestImeiPermission();
@@ -47,8 +48,7 @@ class InfoFragment: Fragment() {
     }
 
     fun request_button(view: View){
-        if (checkSelfPermission(context!!,
-                        Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
+        if (context?.checkSelfPermission(Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
             Toast.makeText(context, getString(R.string.permission_granted_text),
                     Toast.LENGTH_SHORT).show()
         } else {
@@ -57,12 +57,12 @@ class InfoFragment: Fragment() {
     }
 
     fun requestImeiPermission(){
-        val permissionHelper = PermissionHelper(activity!!)
+        val permissionHelper = PermissionHelper(context as Activity)
         if (shouldShowRequestPermissionRationale(Manifest.permission.READ_PHONE_STATE)){
             Toast.makeText(context, getString(R.string.need_permission),
                     Toast.LENGTH_LONG).show()
         }
-        permissionHelper.requestAllPermission(arrayOf(android.Manifest.permission.READ_PHONE_STATE))
+        permissionHelper.requestAllPermission(arrayOf(Manifest.permission.READ_PHONE_STATE))
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
