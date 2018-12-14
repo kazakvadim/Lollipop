@@ -1,5 +1,6 @@
 package com.example.kazak.lollipop
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.content.pm.PackageManager

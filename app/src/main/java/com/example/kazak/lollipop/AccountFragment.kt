@@ -46,7 +46,7 @@ class AccountFragment: Fragment() {
                               container : ViewGroup?,
                               savedInstanceState: Bundle?) : View? {
         setHasOptionsMenu(true)
-        imageHelper = ImageHelper(activity!!, this)
+        imageHelper = ImageHelper(context!!, this)
         return inflater.inflate(R.layout.account_fragment, container, false)
 
     }

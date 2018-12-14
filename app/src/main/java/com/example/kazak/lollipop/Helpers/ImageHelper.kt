@@ -2,6 +2,7 @@ package com.example.kazak.lollipop.Helpers
 
 import android.Manifest
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.icu.text.SimpleDateFormat
@@ -16,13 +17,14 @@ import java.io.File
 import java.io.IOException
 import java.util.*
 
-class ImageHelper(activity: Activity, fragment: Fragment) {
-    var PhotoPath : String = ""
+class ImageHelper(context: Context, fragment: Fragment) {
+    private val activity = context as Activity
+    private var context: Context
+    private var fragment: Fragment
     var permissionHelper = PermissionHelper(activity)
-    private var activity: Activity = activity
-    private var fragment: Fragment = fragment
+    var PhotoPath : String = ""
     init {
-        this.activity = activity
+        this.context = context
         this.fragment = fragment
     }
 
@@ -31,7 +33,7 @@ class ImageHelper(activity: Activity, fragment: Fragment) {
         // file name
         val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
         // directory
-        val storageDir: File? = activity?.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        val storageDir: File? = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
         return File.createTempFile("JPEG_${timeStamp}_",".jpg", storageDir)
           .apply {
             PhotoPath = absolutePath
@@ -39,14 +41,14 @@ class ImageHelper(activity: Activity, fragment: Fragment) {
     }
 
     fun dispatchTakePictureIntent() {
-        if (ContextCompat.checkSelfPermission(activity,
+        if (ContextCompat.checkSelfPermission(context,
                         Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission(activity,
+                ContextCompat.checkSelfPermission(context,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
         {
             val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
             val photoFile = createImageFile()
-            val photoURI: Uri = FileProvider.getUriForFile(activity,"com.example.android.fileprovider", photoFile)
+            val photoURI: Uri = FileProvider.getUriForFile(context,"com.example.android.fileprovider", photoFile)
             intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
             fragment.startActivityForResult(intent, Constants.REQUEST_IMAGE_CAPTURE)
         }
@@ -57,10 +59,10 @@ class ImageHelper(activity: Activity, fragment: Fragment) {
 
     fun dispatchSelectPictureIntent()
     {
-        if (checkSelfPermission(activity,
+        if (checkSelfPermission(context,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
         {
-            val intent: Intent = Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+            val intent = Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
             fragment.startActivityForResult(intent, Constants.REQUEST_GALLERY_PICK)
         }
         else {
@@ -68,41 +70,3 @@ class ImageHelper(activity: Activity, fragment: Fragment) {
         }
     }
 }
-
-
-
-//    fun dispatchTakePictureIntent() {
-//        if (ContextCompat.checkSelfPermission(activity,
-//                        Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED &&
-//                ContextCompat.checkSelfPermission(activity,
-//                        Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
-//        {
-//            val frag: Fragment = fragment
-//            Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
-//                // Ensure that there's a camera activity to handle the intent
-//                takePictureIntent.resolveActivity(activity.packageManager)?.also {
-//                    // Create the File where the photo should go
-//                    val photoFile: File? = try {
-//                        createImageFile()
-//                    } catch (ex: IOException) {
-//                        // Error occurred while creating the File
-//                        null
-//                    }
-//                    // Continue only if the File was successfully created
-//                    photoFile?.also {
-//                        val photoURI: Uri = FileProvider.getUriForFile(
-//                                activity,
-//                                "com.example.android.fileprovider",
-//                                it
-//                        )
-//                        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
-//                        frag.startActivityForResult(takePictureIntent, Constants.REQUEST_IMAGE_CAPTURE)
-//                    }
-//                }
-//            }
-//        }
-//        else {
-//            permissionHelper.requestPhotoPermission()
-//        }
-//
-//    }
