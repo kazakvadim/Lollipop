@@ -41,7 +41,7 @@ class ImageHelper(context: Context, fragment: Fragment) {
         }
     }
 
-    fun dispatchTakePictureIntent() {
+    fun dispatchTakePictureIntent()  {
         if (checkSelfPermission(context,
                         Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED &&
                 checkSelfPermission(context,

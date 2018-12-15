@@ -83,12 +83,16 @@ class AccountFragment: Fragment() {
                 if (user != null){
                     cur_user = user
                 }
-                cur_user?.let {
+                cur_user.let {
                     email_text_view?.text = it.email
                     edit_email?.setText(it.email)
                     phone_text_view?.text = it.phone
                     edit_phone?.setText(it.phone)
-                    full_name_text_view?.text = it.name + " " + it.last_name
+                    name_text_view?.text = it.name
+                    edit_name?.setText(it.name)
+                    last_name_text_view?.text = it.last_name
+                    edit_last_name?.setText(it.last_name)
+                   // full_name_text_view?.text = it.name + " " + it.last_name
 
                     val photoUri = Uri.parse(it.image_uri)
                     avatar_image_view?.setImageURI(photoUri)
@@ -101,6 +105,7 @@ class AccountFragment: Fragment() {
         }
         val currentUserRef = mUsersRef.child("Kozachenko")
         currentUserRef.addValueEventListener(userListener)
+
         val permissionHelper = PermissionHelper(context as Activity)
         camera_button.setOnClickListener{
             imageHelper.dispatchTakePictureIntent()
