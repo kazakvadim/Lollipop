@@ -16,6 +16,7 @@ import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.register_fragment.*
 
 class RegisterFragment: Fragment() {
+
     override fun onCreateView(inflater: LayoutInflater,
                               container : ViewGroup?,
                               savedInstanceState: Bundle?) : View? {
@@ -26,35 +27,31 @@ class RegisterFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?)
     {
         super.onViewCreated(view, savedInstanceState)
+        val activity = activity as SignInActivity
         register_button.setOnClickListener{
-           performRegister()
-        }
+                activity.performRegister()
+          }
+
         val button = view.findViewById<TextView>(R.id.already_have_account_text_view)
         button?.setOnClickListener {
             findNavController().navigate(R.id.login_fragment)
         }
     }
-    private fun performRegister(){
-        val email = email_edittext_register.text.toString()
-        val password = password_edittext_register.text.toString()
+//    private fun performRegister(){
+//        if (email.isEmpty() || password.isEmpty()) {
+//            Toast.makeText(context, "Please enter email/password", Toast.LENGTH_SHORT).show()
+//            return
+//        }
+//        FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
+//                .addOnCompleteListener{
+//                    if (it.isSuccessful)
+//                        return@addOnCompleteListener
+//                    Log.d("Register", "Successfully created user with id")
+//                }
+//                .addOnFailureListener{
+//                    Log.d("Register", "Failed to create user: ${it.message}")
+//                    Toast.makeText(context, "Failed to create user: ${it.message}", Toast.LENGTH_SHORT).show()
+//                }
+//    }
 
-        if (email.isEmpty() || password.isEmpty()) {
-            Toast.makeText(context, "Please enter email/password", Toast.LENGTH_SHORT).show()
-            return
-        }
-        Log.d("RegisterFragment", "Email is " + email)
-        Log.d("RegisterFragment", "Password $password")
-        FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener{
-                    if (it.isSuccessful) return@addOnCompleteListener
-                    // else if successful
-                    Log.d("Register", "Successfully created user with id")
-                }
-                .addOnFailureListener{
-                    Log.d("Register", "Failed to create user: ${it.message}")
-                    Toast.makeText(context, "Failed to create user: ${it.message}", Toast.LENGTH_SHORT).show()
-
-                }
-
-    }
 }

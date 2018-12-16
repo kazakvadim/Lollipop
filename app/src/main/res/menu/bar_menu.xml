@@ -6,4 +6,9 @@
         android:icon="@drawable/ic_info_outline_black_24dp"
         android:title="Imei info"
         app:showAsAction="always"/>
+    <item
+        android:id="@+id/logout_button"
+        android:icon="@drawable/ic_exit_to_app_black_24dp"
+        android:title="Logout"
+        app:showAsAction="always"/>
 </menu>

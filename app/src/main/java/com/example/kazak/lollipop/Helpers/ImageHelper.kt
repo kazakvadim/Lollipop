@@ -18,15 +18,12 @@ import java.io.File
 import java.io.IOException
 import java.util.*
 
-class ImageHelper(context: Context, fragment: Fragment) {
+class ImageHelper(context: Context) {
     private val activity = context as Activity
     private var context: Context
-    private var fragment: Fragment
-    var permissionHelper = PermissionHelper(activity)
     var PhotoPath : String = ""
     init {
         this.context = context
-        this.fragment = fragment
     }
 
     @Throws(IOException::class)
@@ -41,33 +38,16 @@ class ImageHelper(context: Context, fragment: Fragment) {
         }
     }
 
-    fun dispatchTakePictureIntent()  {
-        if (checkSelfPermission(context,
-                        Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED &&
-                checkSelfPermission(context,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
-        {
-            val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-            val photoFile = createImageFile()
-            val photoURI: Uri = FileProvider.getUriForFile(context,"com.example.android.fileprovider", photoFile)
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
-            fragment.startActivityForResult(intent, CAMERA)
-        }
-        else {
-            permissionHelper.requestPhotoPermission()
-        }
+    fun dispatchTakePictureIntent(): Intent  {
+        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        val photoFile = createImageFile()
+        val photoURI: Uri = FileProvider.getUriForFile(context,"com.example.android.fileprovider", photoFile)
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+        return intent
     }
 
-    fun dispatchSelectPictureIntent()
+    fun dispatchSelectPictureIntent() : Intent
     {
-        if (checkSelfPermission(context,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
-        {
-            val intent = Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-            fragment.startActivityForResult(intent, GALLERY)
-        }
-        else {
-            permissionHelper.requestPhotoPermission()
-        }
+        return Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
     }
 }

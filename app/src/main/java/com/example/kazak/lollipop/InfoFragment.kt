@@ -12,8 +12,6 @@ import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.info_fragment.*
 import androidx.core.content.ContextCompat.checkSelfPermission
 import android.Manifest
-import android.app.Activity
-import com.example.kazak.lollipop.Helpers.Constants
 import com.example.kazak.lollipop.Helpers.Constants.Companion.IMEI_PERMISSION_CODE
 import com.example.kazak.lollipop.Helpers.PermissionHelper
 
@@ -36,7 +34,6 @@ class InfoFragment: Fragment() {
         }
         if (context?.checkSelfPermission(Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
             getIMEI()
-
             request_imei.visibility = View.GONE
         } else {
             requestImeiPermission();
@@ -59,12 +56,11 @@ class InfoFragment: Fragment() {
     }
 
     fun requestImeiPermission(){
-        val permissionHelper = PermissionHelper(context as Activity)
         if (shouldShowRequestPermissionRationale(Manifest.permission.READ_PHONE_STATE)){
             Toast.makeText(context, getString(R.string.need_permission),
                     Toast.LENGTH_LONG).show()
         }
-        permissionHelper.requestAllPermission(arrayOf(Manifest.permission.READ_PHONE_STATE))
+        requestPermissions(arrayOf(android.Manifest.permission.READ_PHONE_STATE), IMEI_PERMISSION_CODE)
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {

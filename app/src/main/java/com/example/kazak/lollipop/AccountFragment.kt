@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 
 import android.app.Activity
 import android.app.AlertDialog
+import android.app.ProgressDialog
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -22,19 +23,23 @@ import com.example.kazak.lollipop.Helpers.Constants.Companion.GALLERY
 import com.example.kazak.lollipop.Helpers.ImageHelper
 import com.example.kazak.lollipop.Helpers.PermissionHelper
 import com.example.kazak.lollipop.Model.User
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 import java.io.File
 import androidx.core.app.NotificationCompat.getExtras
+import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.checkSelfPermission
+import com.example.kazak.lollipop.Helpers.DatabaseHelper
+import com.example.kazak.lollipop.View.IDatabaseView
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.*
+import kotlinx.android.synthetic.main.register_fragment.*
 
 
-class AccountFragment: Fragment() {
+
+
+class AccountFragment: Fragment(), IDatabaseView {
     lateinit var imageHelper : ImageHelper
-    val mDatabase = FirebaseDatabase.getInstance().getReference()
-    val mUsersRef = mDatabase.child("users")
-    lateinit var cur_user : User
+    lateinit var databaseHelper : DatabaseHelper
+    lateinit var progressSpinner: ProgressSpinner
     var tempUri : String? = null
 
 
@@ -42,76 +47,103 @@ class AccountFragment: Fragment() {
                               container : ViewGroup?,
                               savedInstanceState: Bundle?) : View? {
         setHasOptionsMenu(true)
-        imageHelper = ImageHelper(context!!, this)
-        return inflater.inflate(R.layout.account_fragment, container, false)
 
+        databaseHelper = DatabaseHelper()
+        imageHelper = ImageHelper(context!!)
+        progressSpinner = ProgressSpinner(context!!)
+        return inflater.inflate(R.layout.account_fragment, container, false)
     }
+
 
     val dialogClickListener = DialogInterface.OnClickListener { dialog, which ->
         when (which) {
             DialogInterface.BUTTON_POSITIVE ->
             {
-                val user = User(
-                        phone=edit_phone.text.toString(),
-                        email=edit_email.text.toString(),
-                        name = cur_user.name.toString(),
-                        last_name = cur_user.last_name.toString(),
-                        image_uri = cur_user.image_uri.toString()
-                )
-                if (tempUri != null){
-                    avatar_image_view?.setImageURI(Uri.parse(tempUri))
-                    cur_user.image_uri = tempUri
-                }
-                mUsersRef.child("Kozachenko").setValue(user)
+                SaveChangedUserFields()
             }
             DialogInterface.BUTTON_NEGATIVE ->
             {
-                edit_email.setText(email_text_view.text)
-                edit_phone.setText(phone_text_view.text)
-                avatar_image_view1.setImageURI(Uri.parse(cur_user.image_uri))
+                RestoreUserFields()
             }
         }
         profile_switcher.showNext()
     }
 
+    fun saveUser(){
+        SaveChangedUserFields()
+        //databaseHelper.saveUser()
+    }
+
+    private fun SaveChangedUserFields(){
+        databaseHelper.cur_user.name = edit_name.text.toString()
+        databaseHelper.cur_user.last_name = edit_last_name.text.toString()
+        databaseHelper.cur_user.phone = edit_phone.text.toString()
+        if (tempUri != null){
+            avatar_image_view?.setImageURI(Uri.parse(tempUri))
+            databaseHelper.cur_user.image_uri = tempUri
+        }
+        databaseHelper.saveUser()
+    }
+
+    private fun RestoreUserFields(){
+        edit_name.setText(name_text_view.text)
+        edit_last_name.setText(last_name_text_view.text)
+        edit_phone.setText(phone_text_view.text)
+        avatar_image_view1.setImageURI(Uri.parse(databaseHelper.cur_user.image_uri))
+    }
+
+    override fun setUser(user: User){
+        phone_text_view?.text = user.phone
+        edit_phone?.setText(user.phone)
+        name_text_view?.text = user.name
+        edit_name?.setText(user.name)
+        last_name_text_view?.text = user.last_name
+        edit_last_name?.setText(user.last_name)
+        val photoUri = Uri.parse(user.image_uri)
+        val file = File(photoUri.getPath())
+        if (file.exists()){
+        avatar_image_view?.setImageURI(photoUri)
+        avatar_image_view1?.setImageURI(photoUri)
+        }
+        else {
+           avatar_image_view?.setImageResource(R.drawable.avatar)
+           avatar_image_view1?.setImageResource(R.drawable.avatar)
+        }
+    }
+
+    fun checkNeedToUpdateUser(): Boolean {
+        val cur_user = databaseHelper.cur_user
+        val name = edit_name.text.toString()
+        val lastname = edit_last_name.text.toString()
+        val phone_number = edit_phone.text.toString()
+        return !cur_user.name.equals(name) ||
+                !cur_user.phone.equals(phone_number) ||
+                !cur_user.last_name.equals(lastname)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?)
     {
         super.onViewCreated(view, savedInstanceState)
-        val userListener = object : ValueEventListener {
-            override fun onDataChange(p0: DataSnapshot) {
-                val user = p0.getValue(User::class.java)
-                if (user != null){
-                    cur_user = user
-                }
-                cur_user.let {
-                    email_text_view?.text = it.email
-                    edit_email?.setText(it.email)
-                    phone_text_view?.text = it.phone
-                    edit_phone?.setText(it.phone)
-                    name_text_view?.text = it.name
-                    edit_name?.setText(it.name)
-                    last_name_text_view?.text = it.last_name
-                    edit_last_name?.setText(it.last_name)
-                   // full_name_text_view?.text = it.name + " " + it.last_name
-
-                    val photoUri = Uri.parse(it.image_uri)
-                    avatar_image_view?.setImageURI(photoUri)
-                   avatar_image_view1?.setImageURI(photoUri)
-                }
-            }
-            override fun onCancelled(p0: DatabaseError) {
-                TODO("not implemented")
-            }
-        }
-        val currentUserRef = mUsersRef.child("Kozachenko")
-        currentUserRef.addValueEventListener(userListener)
-
+        progressSpinner.showProgressDialog()
+        databaseHelper.loadUserInformation(this)
         val permissionHelper = PermissionHelper(context as Activity)
         camera_button.setOnClickListener{
-            imageHelper.dispatchTakePictureIntent()
+            if (checkSelfPermission(context!!,Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED &&
+                    checkSelfPermission(context!!,Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                startActivityForResult(imageHelper.dispatchTakePictureIntent(), CAMERA)
+            }
+            else{
+                permissionHelper.requestPhotoPermission()
+            }
         }
         gallery_button.setOnClickListener{
-            imageHelper.dispatchSelectPictureIntent()
+            if (checkSelfPermission(context!!,Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
+            {
+                startActivityForResult(imageHelper.dispatchSelectPictureIntent(), GALLERY)
+            }
+            else {
+                permissionHelper.requestPhotoPermission()
+            }
         }
         change_profile.setOnClickListener{
             profile_switcher.showNext()
@@ -122,17 +154,25 @@ class AccountFragment: Fragment() {
                     .setPositiveButton("Yes", dialogClickListener)
                     .setNegativeButton("No", dialogClickListener)
                     .show()
-//            profile_switcher.showNext()
+        }
+        save_button.setOnClickListener {
+            val builder = AlertDialog.Builder(context)
+            builder.setMessage("Do you want to save data?")
+                    .setPositiveButton("Yes", dialogClickListener)
+                    .setNegativeButton("No", dialogClickListener)
+                    .show()
         }
 
         if (context?.checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ||
                 context?.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             permissionHelper.requestPhotoPermission()
         }
-//        val user = User(name = "Vadim", last_name = "Kozachenko", email = "k.a.z.a.k.2013@mail.ru", phone = "+375296966798")
-//        mDatabase.child("users").child("Kozachenko").setValue(user)
+        progressSpinner.hideProgressDialog()
     }
 
+    override fun stopProgressSpinner() {
+        progressSpinner.hideProgressDialog()
+    }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?)
     {
         super.onActivityResult(requestCode, resultCode, data)
@@ -141,17 +181,21 @@ class AccountFragment: Fragment() {
                 val f = File(imageHelper.PhotoPath)
                 val photoURI = Uri.fromFile(f)
                 avatar_image_view.setImageURI(photoURI)
-                cur_user.image_uri = photoURI.toString()
+                databaseHelper.cur_user.image_uri = photoURI.toString()
                 avatar_image_view1.setImageURI(photoURI)
                 tempUri = photoURI.toString()
             }
+
             else if (requestCode == GALLERY) {
-                val photoURI: Uri? = data?.data
-                val bmp: Bitmap = MediaStore.Images.Media.getBitmap(activity?.contentResolver, photoURI)
-                avatar_image_view.setImageBitmap(bmp)
-                avatar_image_view1.setImageBitmap(bmp)
-                tempUri = photoURI.toString()
-                // cur_user.image_uri = photoURI.toString()
+                if(data != null)
+                {
+                    val photoURI : Uri = data.data!!
+                    val bmp: Bitmap = MediaStore.Images.Media.getBitmap(activity?.contentResolver, photoURI)
+                    avatar_image_view.setImageBitmap(bmp)
+                    avatar_image_view1.setImageBitmap(bmp)
+                    tempUri = photoURI.toString()
+                }
+
             }
         }
     }

@@ -15,12 +15,4 @@
         android:id="@+id/infoFragment"
         android:name="com.example.kazak.lollipop.InfoFragment"
         android:label="Info" />
-    <fragment
-        android:id="@+id/login_fragment"
-        android:name="com.example.kazak.lollipop.LoginFragment"
-        android:label="Login" />
-    <fragment
-        android:id="@+id/register_fragment"
-        android:name="com.example.kazak.lollipop.RegisterFragment"
-        android:label="Register" />
 </navigation>

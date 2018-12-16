@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <EditText
-            android:id="@+id/username_edittext_register"
+            android:id="@+id/name_edittext_register"
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_marginEnd="32dp"
@@ -24,12 +24,26 @@
             android:layout_marginTop="32dp"
             android:background="@drawable/rounded_edittext"
             android:ems="10"
-            android:hint="Username"
+            android:hint="Name"
             android:inputType="textPersonName"
             android:paddingLeft="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/button" />
+
+        <EditText
+            android:id="@+id/lastname_edittext_register"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/rounded_edittext"
+            android:ems="10"
+            android:hint="Lastname"
+            android:inputType="textEmailAddress"
+            android:paddingLeft="16dp"
+            app:layout_constraintEnd_toEndOf="@+id/name_edittext_register"
+            app:layout_constraintStart_toStartOf="@+id/name_edittext_register"
+            app:layout_constraintTop_toBottomOf="@+id/name_edittext_register" />
 
         <EditText
             android:id="@+id/email_edittext_register"
@@ -41,9 +55,9 @@
             android:hint="Email"
             android:inputType="textEmailAddress"
             android:paddingLeft="16dp"
-            app:layout_constraintEnd_toEndOf="@+id/username_edittext_register"
-            app:layout_constraintStart_toStartOf="@+id/username_edittext_register"
-            app:layout_constraintTop_toBottomOf="@+id/username_edittext_register" />
+            app:layout_constraintEnd_toEndOf="@+id/lastname_edittext_register"
+            app:layout_constraintStart_toStartOf="@+id/lastname_edittext_register"
+            app:layout_constraintTop_toBottomOf="@+id/lastname_edittext_register" />
 
         <EditText
             android:id="@+id/password_edittext_register"
